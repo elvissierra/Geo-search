@@ -1,0 +1,9 @@
+[run]
+omit = env/*, tests/*, geo_search_api/wsgi.py, manage.py, geo_search_api/settings.py, geo_search_api/environments.py
+concurrency = multiprocessing
+parallel = true
+sigterm = true
+
+[report]
+exclude_lines =
+    pragma: no cover

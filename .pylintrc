@@ -1,0 +1,6 @@
+[MASTER]
+ignore=env
+load-plugins=pylint_django
+django-settings-module=geo_search_api.settings
+[MESSAGES CONTROL]
+disable=C0114, C0115, R0801

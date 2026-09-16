@@ -1,0 +1,9 @@
+database
+.idea
+__pycache__
+.coverage
+.venv
+.env
+/coverage.xml
+py10
+.ruff_cache
