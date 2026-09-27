@@ -216,11 +216,11 @@ class CIEnvironment(Environment):
         self.databases = {
             "default": {
                 "ENGINE": "django.db.backends.postgresql",
-                "HOST": "postgres",
-                "PORT": "5432",
-                "NAME": self.project_name,
-                "USER": "local_postgresql_user",
-                "PASSWORD": "local_strong_postgresql_password",
+                "HOST": self.env("DB_HOST", default="postgres"),
+                "PORT": self.env("DB_PORT", default="5432"),
+                "NAME": self.env("DB_NAME", default=self.project_name),
+                "USER": self.env("DB_USERNAME", default="local_postgresql_user"),
+                "PASSWORD": self.env("DB_PASSWORD", default="local_strong_postgresql_password"),
                 "OPTIONS": {"sslmode": "disable"},
             }
         }
