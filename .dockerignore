@@ -1,0 +1,7 @@
+database
+.gitignore
+.gitlab-ci.yml
+venv
+.env
+py10
+.ruff_cache

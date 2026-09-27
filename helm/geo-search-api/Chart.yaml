@@ -1,0 +1,8 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Geo Search Tools Helm Chart
+keywords:
+- geo-search-api
+name: geo-search-api-helm-chart
+type: application
+version: 0.1.0

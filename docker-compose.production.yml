@@ -1,0 +1,6 @@
+version: '3.9'
+
+services:
+
+  geo_search_api:
+    image: geo-search/api:production.latest

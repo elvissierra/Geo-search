@@ -1,0 +1,124 @@
+version: '3.9'
+
+services:
+
+  posts_db:
+    image: postgres:14-alpine
+    container_name: posts_db
+    environment:
+      POSTGRES_USER: if_postgres_user
+      POSTGRES_DB: if_database
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "127.0.0.1:8001:5432"
+    volumes:
+      - geo_search_database_volume:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d if_database -U if_postgres_user"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      - geo_search_network
+
+  geo_search_opensearch:
+    image: opensearchproject/opensearch:2.3.0
+    container_name: geo_search_opensearch
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=geo_search_opensearch
+      - discovery.seed_hosts=geo_search_opensearch
+      - cluster.initial_cluster_manager_nodes=geo_search_opensearch
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - geo_search_opensearch_volume:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600
+    networks:
+      - geo_search_network
+    healthcheck:
+      test: curl -s http://localhost:9200 --insecure >/dev/null || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  geo_search_opensearch_dashboards:
+    image: opensearchproject/opensearch-dashboards:2.3.0
+    container_name: geo_search_opensearch_dashboards
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: '["http://geo_search_opensearch:9200"]'
+      DISABLE_SECURITY_DASHBOARDS_PLUGIN: 'true'
+    networks:
+      - geo_search_network
+
+  geo_search_api:
+    image: geo-search/api:development.latest
+    container_name: geo_search_api
+    stdin_open: true
+    tty: true
+    depends_on:
+      posts_db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./:/app
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q http://localhost:8000/api/health_check/cluster -O /dev/null"
+        ]
+      interval: 200s
+      timeout: 200s
+      retries: 5
+    deploy:
+      mode: global
+      endpoint_mode: vip
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1024M
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      - geo_search_network
+
+volumes:
+  geo_search_database_volume:
+  geo_search_opensearch_volume:
+
+networks:
+  geo_search_network:

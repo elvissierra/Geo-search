@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata :
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}
+      labels:
+        app: {{ .Release.Name }}  # Service will look for those PODS Labels!!!
+      annotations:
+        releaseTimestamp: {{ .Values.releaseTimestamp }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: Purpose
+                    operator: In
+                    values:
+                      - {{ .Values.clusterNodeSelector }}
+      containers:
+        - image: {{ .Values.container.image }}
+          name: {{ .Release.Name }}-container
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "500m"
+              memory: 1Gi
+            limits:
+              cpu: "1000m"
+              memory: 4Gi
+          env:
+            - name: CURRENT_ENVIRONMENT
+              value: {{ .Values.application.currentEnvironment }}
+            - name: DJANGO_SECRET_KEY
+              value: {{ .Values.application.djangoSecretKey }}
+            - name: SHOW_TOPICS_MANAGEMENT_API
+              value: {{ .Values.application.showTopicsManagementApi }}
+            - name: CLOUDWATCH_LOG_GROUP
+              value: {{ .Values.application.cloudwatch.logGroup }}
+            - name: CLOUDWATCH_STREAM_NAME
+              value: {{ .Values.application.cloudwatch.streamName }}
+            - name: AUTH0_DOMAIN
+              value: {{ .Values.application.auth0.domain }}
+            - name: AUTH0_ISSUER
+              value: {{ .Values.application.auth0.issuer }}
+            - name: AUTH0_API_AUDIENCE
+              value: {{ .Values.application.auth0.apiAudience }}
+            - name: AWS_OPENSEARCH_HOST
+              value: {{ .Values.application.opensearch.host }}
+            - name: DB_HOST
+              value: {{ .Values.application.db.host }}
+            - name: DB_PORT
+              value: {{ .Values.application.db.port | quote }}
+            - name: DB_NAME
+              value: {{ .Values.application.db.name }}
+            - name: DB_USERNAME
+              value: {{ .Values.application.db.username }}
+            - name: DB_PASSWORD
+              value: {{ .Values.application.db.password }}
+            - name: AWS_LOAD_BALANCER_URL
+              value: {{ .Values.network.loadBalancer.url }}
+            - name: LOG_LEVEL
+              value: {{ .Values.application.cloudwatch.logLevel }}
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      terminationGracePeriodSeconds: {{ .Values.container.terminationGracePeriodSeconds }}

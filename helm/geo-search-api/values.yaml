@@ -1,0 +1,36 @@
+container:
+  image: image
+  targetPort: 8000  # port to which your app listen
+  port: 80          # available outside
+  terminationGracePeriodSeconds: 3600
+application:
+  currentEnvironment: currentEnvironment
+  cloudwatch:
+    logLevel: ERROR
+    logGroup: groupName
+    streamName: streamName
+  auth0:
+    domain: domain
+    issuer: issuer
+    apiAudience: apiAudience
+  opensearch:
+    host: opensearchHost
+  djangoSecretKey: djangoSecretKey
+  showTopicsManagementApi: showTopicsManagementApi
+  db:
+    host: host
+    port: port
+    name: name
+    username: username
+    password: password
+network:
+  type: LoadBalancer
+  loadBalancer:
+    schema: internal
+    subnets: subnets
+    url: url
+replicaCount: 1
+releaseTimestamp: releaseTimestamp
+serviceAccountName: serviceAccountName
+clusterNodeSelector: api
+environemnt: env
