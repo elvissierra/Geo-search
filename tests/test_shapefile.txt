@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "Global_Basins_Shapefile_102022",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "layer": "11_Columbia_Sedimentary_Basins", "Name": "Catatumbo", "Expl_Statu": "Well Explored", "Province": "Sub-Andean", "Location": "Onshore", "Basin_Type": "Retro-arc Foreland (Ocean - Continent)", "Pet_System": "Producing fields" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -73.168776783443619, 8.881851367806364 ], [ -73.138344791983741, 8.984903028866055 ], [ -73.072374667411211, 9.095881733520429 ], [ -72.997015781723377, 9.198933681292552 ] ] ] ] } },
+{ "type": "Feature", "properties": { "layer": "11_Columbia_Sedimentary_Basins", "Name": "Catatumbo", "Expl_Statu": "Well Explored", "Province": "Sub-Andean", "Location": "Onshore", "Basin_Type": "Retro-arc Foreland (Ocean - Continent)", "Pet_System": "Producing fields" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -73.168776783443619, 8.881851367806364 ], [ -73.138344791983741, 8.984903028866055 ], [ -73.072374667411211, 9.095881733520429 ], [ -72.997015781723377, 9.198933681292552 ] ] ] ] } }
+]
+}
