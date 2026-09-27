@@ -1,6 +1,5 @@
 database
 .gitignore
-.gitlab-ci.yml
 venv
 .env
 py10

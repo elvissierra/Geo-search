@@ -10,7 +10,7 @@ from utils import SecretManager
 
 
 class PossibleEnvironments(Enum):
-    GITLAB_UNIT_TESTS = "gitlab_unit_tests"
+    CI_UNIT_TESTS = "ci_unit_tests"
     LOCAL_UNIT_TESTS = "local_unit_tests"
     LOCAL_DO_NOT_VALIDATE_TOKEN = "local_do_not_validate_token"
     LOCAL_VALIDATE_TOKEN = "local_validate_token"
@@ -193,8 +193,8 @@ class Environment:
         """
         if Environment.current_environment == PossibleEnvironments.LOCAL_UNIT_TESTS:
             return LocalUnitTestsEnvironment()
-        if Environment.current_environment == PossibleEnvironments.GITLAB_UNIT_TESTS:
-            return GitlabTestsEnvironment()
+        if Environment.current_environment == PossibleEnvironments.CI_UNIT_TESTS:
+            return CIUnitTestsEnvironment()
         if Environment.current_environment == PossibleEnvironments.LOCAL_DO_NOT_VALIDATE_TOKEN:
             return LocalDoNotValidateTokenEnvironment()
         if Environment.current_environment == PossibleEnvironments.LOCAL_VALIDATE_TOKEN:
@@ -210,7 +210,7 @@ class Environment:
         raise Exception("Invalid environment")
 
 
-class Gitlab(Environment):
+class CIEnvironment(Environment):
     def __init__(self):
         super().__init__()
         self.databases = {
@@ -283,7 +283,7 @@ class OnCluster(Environment):
         }
 
 
-class GitlabTestsEnvironment(Gitlab):
+class CIUnitTestsEnvironment(CIEnvironment):
     def __init__(self):
         super().__init__()
         self.show_topics_management_api = True

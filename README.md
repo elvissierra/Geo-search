@@ -19,7 +19,7 @@ https://docs.docker.com/compose/environment-variables/
 
 - CURRENT_ENVIRONMENT - set one of the supported environments:
 ```
-"gitlab_unit_tests"
+"ci_unit_tests"
 "local_unit_tests"
 "local_do_not_validate_token"
 "local_validate_token"
@@ -86,11 +86,6 @@ export CURRENT_ENVIRONMENT=local_do_not_validate_token DB_HOST=localhost ...
 ./manage.py runserver
 ```
 - Access application via `http://127.0.0.1:8000` address.
-
-## Git Flow
-
-Git flow is described (here)[https://studio-x.atlassian.net/wiki/spaces/IF/pages/2139258881/Git+Flow]
-Branch and commit rules are enforced according to the documentation
 
 ## Django
 
